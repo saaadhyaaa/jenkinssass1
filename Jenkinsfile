@@ -1,7 +1,5 @@
 pipeline {
-    agent { 
-        node { label 'windows' } 
-    }
+    agent any
 
     stages {
         stage('Checkout') {
@@ -13,11 +11,9 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 bat '''
-                :: Create venv only if it does not exist
                 if not exist venv (
                     python -m venv venv
                 )
-                :: Activate and install dependencies efficiently
                 call venv\\Scripts\\activate
                 python -m pip install --upgrade pip
                 pip install -r requirements.txt
@@ -36,7 +32,11 @@ pipeline {
     }
 
     post {
-        success { echo 'SUCCESS: All stages completed perfectly!' }
-        failure { echo 'FAILURE: Something went wrong in the pipeline.' }
+        success { 
+            echo 'SUCCESS: All stages completed perfectly!' 
+        }
+        failure { 
+            echo 'FAILURE: Something went wrong in the pipeline.' 
+        }
     }
 }
